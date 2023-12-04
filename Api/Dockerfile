@@ -27,3 +27,6 @@ COPY --from=build /app/out .
 
 # Specify the entry point for the container
 ENTRYPOINT ["dotnet", "Api.dll"]
+
+
+
