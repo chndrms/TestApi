@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
+    #region MyRegion
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
@@ -30,4 +31,6 @@ namespace Api.Controllers
             .ToArray();
         }
     }
+    #endregion
+
 }
