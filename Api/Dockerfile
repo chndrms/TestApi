@@ -1,21 +1,29 @@
-# Multi-stage build
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+# Use the official .NET SDK image as a base image
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy only the project file and restore dependencies
+# Copy the project file to the working directory
 COPY *.csproj .
+
+# Restore NuGet packages
 RUN dotnet restore
 
-# Copy the rest of the application
+# Copy the remaining source code to the working directory
 COPY . .
 
 # Build the application
-FROM base AS build
-WORKDIR /app
-RUN dotnet publish --no-restore -c Release -o out
+RUN dotnet publish -c Release -o out
 
-# Final stage for running the application --
+# Use the official ASP.NET runtime image as a base image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
+
+# Set the working directory in the container
 WORKDIR /app
+
+# Copy the published output from the build image to the runtime image
 COPY --from=build /app/out .
-ENTRYPOINT ["dotnet", "Api.dll"]
+
+# Specify the entry point for the container
+ENTRYPOINT ["dotnet", "YourAppName.dll"]
